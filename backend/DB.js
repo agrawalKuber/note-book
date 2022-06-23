@@ -1,11 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
-const mongoURI = "mongodb://localhost:27017/oneNote?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false"
+const mongoURI = process.env.MONGO_URI;
 
-const connectToMongo = ()=>{
-    mongoose.connect(mongoURI, ()=>{
-        console.log("Connected to Mongo Successfully");
-    })
-}
+const connectToMongo = () => {
+  mongoose.connect(mongoURI, () => {
+    console.log("Connected to Mongo Successfully");
+  });
+};
 
 module.exports = connectToMongo;

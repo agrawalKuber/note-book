@@ -1,0 +1,23 @@
+#TitleBox {
+  width: 15vw;
+}
+
+#ContentBox {
+  width: 35vw;
+  height: 25vh;
+}
+
+@media only screen and (max-width: 450px) {
+  #TitleBox {
+    width: 33%;
+  }
+
+  #ContentBox {
+    width: 80%;
+    height: 100%;
+  }
+}
+
+body {
+  background-color: #79dae8;
+}

@@ -1,0 +1,33 @@
+#TitleBox {
+  width: 15vw;
+}
+
+#ContentBox {
+  width: 35vw;
+  height: 25vh;
+}
+
+@media only screen and (max-width: 450px) {
+  #TitleBox {
+    width: 33%;
+  }
+
+  #ContentBox {
+    width: 80%;
+    height: 100%;
+  }
+}
+
+body {
+  background-color: #F9F2ED;
+
+}
+.nav-style{
+  background-color: #F87474 !important;
+}
+
+.copy-main{
+  position: fixed; 
+  bottom: 0;
+  margin-left: 15%;
+}
