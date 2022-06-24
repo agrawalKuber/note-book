@@ -6,7 +6,6 @@ var jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const { isLoggedIn } = require("../middlewar/isLoggedin");
 const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
@@ -29,6 +28,7 @@ router.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
 router.post(
   "/createUser",
   [
@@ -40,7 +40,7 @@ router.post(
     body(
       "password",
       "Password Should Have a Minimum Of 4 Characters"
-    ).isLength({ min: 5 }),
+    ).isLength({ min: 4 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -61,6 +61,7 @@ router.post(
           id: newUser._id,
         },
       };
+      console.log(data);
 
       const token = jwt.sign(data, JWT_SECRET);
       success = true;
@@ -71,30 +72,27 @@ router.post(
   }
 );
 
-router.post("/login", (req, res) => {
+router.post("/login", passport.authenticate("local"), (req, res) => {
+  console.log(req.body);
   success = false;
   const user = new User({
     username: req.body.username,
     password: req.body.password,
   });
-  req.login(user, (err) => {
-    if (err) {
-      console.log(err);
-      res.redirect("/OneNote/auth/login");
-    } else {
-      const data = {
-        user: {
-          username: user.username,
-          id: user._id,
-        },
-      };
-      const token = jwt.sign(data, JWT_SECRET, { expiresIn: "168h" });
-      success = true;
-      console.log(JWT_SECRET);
-      res.json({ success, token });
-    }
-  });
+  const data = {
+    user: {
+      username: user.username,
+      id: user._id,
+    },
+  };
+  console.log(data);
+  const token = jwt.sign(data, JWT_SECRET, { expiresIn: "168h" });
+  success = true;
+  console.log(user);
+  res.json({ success, token });
 });
+
+router.get("/login", (req, res) => {});
 
 router.get("/logout", (req, res) => {
   req.logout((err) => {
